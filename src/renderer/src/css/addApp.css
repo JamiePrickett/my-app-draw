@@ -1,0 +1,95 @@
+.browse-btn {
+  background-color: #70A9FF;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  width: min-content;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.browse-btn:hover {
+  background-color: #5194f8;
+}
+
+.browse-btn:active {
+  background-color: #3775d1;
+}
+
+.title-input {
+  background-color: #302E2C;
+  border: 1px solid #706F73;
+  outline: none;
+  border-radius: 8px;
+  padding: 8px;
+  color: #E4E4E4;
+  font-size: medium;
+}
+
+.title-input:focus {
+  border-color: #9E4129;
+}
+
+.icon-btn {
+  /* background-color: #9E4129; */
+  width: 64px;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.source-container {
+  background-color: #302E2C;
+  border: 1px solid #706F73;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 4px;
+}
+
+.source-container input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 8px;
+  color: #E4E4E4;
+  font-size: medium;
+}
+
+.source-container:focus-within {
+  border-color: #9E4129;
+}
+
+.source-container button {
+  background-color: #242120;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  color: #E4E4E4;
+  font-size: smaller;
+  margin: 4px 0;
+  cursor: pointer;
+}
+
+.add-btn {
+  background-color: #BF4E30;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  width: min-content;
+  padding: 8px 16px;
+  cursor: pointer;
+  color: #E4E4E4;
+  font-size: larger;
+  font-weight: 700;
+  transition: all 0.1s ease;
+}
+
+.add-btn:hover {
+  transform: scale(1.03);
+  background-color: #D55B38;
+}
+
+.add-btn:active {
+  background-color: #9E4129;
+}
