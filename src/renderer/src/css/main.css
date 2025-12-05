@@ -1,11 +1,24 @@
 @import './base.css';
 
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
-  background-image: url('./wavy-lines.svg');
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+img {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* body {
+  display: flex;
+  overflow: hidden;
+  background-image: url('../assets/wavy-lines.svg');
   background-size: cover;
   user-select: none;
 }
@@ -24,14 +37,6 @@ code {
     Liberation Mono,
     monospace;
   font-size: 85%;
-}
-
-#root {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-bottom: 80px;
 }
 
 .logo {
@@ -168,4 +173,4 @@ code {
   .actions {
     display: none;
   }
-}
+} */
