@@ -2,15 +2,28 @@ import { createFileRoute } from '@tanstack/react-router'
 import electronLogo from '../assets/electron.svg'
 import '../css/index.css'
 import { LibraryIcon, Plus, Search } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AddApp from '@renderer/components/AddApp'
+import { AppItem } from '@renderer/types/app'
+import { loadApps, saveApps } from '@renderer/lib/appStorage'
 
 export const Route = createFileRoute('/')({
   component: Home
 })
 
 function Home() {
+  const [apps, setApps] = useState<AppItem[]>([])
   const [addAppModal, setAddAppModal] = useState(false)
+
+  useEffect(() => {
+    setApps(loadApps())
+  }, [])
+
+  function handleAddApp(newApp: AppItem) {
+    const updated = [...apps, newApp]
+    setApps(updated)
+    saveApps(updated)
+  }
 
   return (
     <>
@@ -35,37 +48,20 @@ function Home() {
             <input placeholder="Search.." />
           </div>
           <div className="app-list">
-            <button className="app-item" onClick={() => console.log('Click')}>
-              <img src={electronLogo} alt="app-item" />
-              <span>Button</span>
-            </button>
-            <button className="app-item" onClick={() => console.log('Click')}>
-              <img src={electronLogo} alt="app-item" />
-              <span>Button</span>
-            </button>
-            <button className="app-item" onClick={() => console.log('Click')}>
-              <img src={electronLogo} alt="app-item" />
-              <span>Button</span>
-            </button>
-            <button className="app-item" onClick={() => console.log('Click')}>
-              <img src={electronLogo} alt="app-item" />
-              <span>Button</span>
-            </button>
-            <button className="app-item" onClick={() => console.log('Click')}>
-              <img src={electronLogo} alt="app-item" />
-              <span>Button</span>
-            </button>
-            <button className="app-item" onClick={() => console.log('Click')}>
-              <img src={electronLogo} alt="app-item" />
-              <span>Button</span>
-            </button>
+            {apps.map((app) => (
+              <button key={app.id} className="app-item" onClick={() => console.log('Click')}>
+                <img src={app.icon} alt={app.title} />
+                <span>{app.title}</span>
+              </button>
+            ))}
+
             <button className="app-item add-app-btn" onClick={() => setAddAppModal(true)}>
               <Plus className="icon" />
             </button>
           </div>
         </div>
       </div>
-      <AddApp open={addAppModal} onClose={() => setAddAppModal(false)} />
+      <AddApp onSubmit={handleAddApp} open={addAppModal} onClose={() => setAddAppModal(false)} />
     </>
   )
 }
