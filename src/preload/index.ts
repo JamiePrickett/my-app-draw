@@ -1,9 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { AppItem } from '../shared/types'
 
 // Custom APIs for renderer
 const api = {
-  pickApp: () => ipcRenderer.invoke('pick-app')
+  pickApp: () => ipcRenderer.invoke('pick-app'),
+  loadApps: () => ipcRenderer.invoke('apps:load'),
+  addApp: (item: AppItem) => ipcRenderer.invoke('apps:add', item),
+  updateApp: (item: AppItem) => ipcRenderer.invoke('apps:update', item),
+  deleteApp: (id: string) => ipcRenderer.invoke('apps:delete', id)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
@@ -14,7 +19,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
-    console.error(error)
+    console.error('failed to expose preload:', error)
   }
 } else {
   // @ts-ignore (define in dts)

@@ -1,8 +1,8 @@
+import '../css/addApp.css'
 import Modal from './Modal'
 import electronLogo from '../assets/electron.svg'
-import '../css/addApp.css'
-import { AppItem } from '../types/app'
 import React, { useRef, useState } from 'react'
+import { AppItem } from '../../../shared/types'
 
 type AddAppProps = {
   open: boolean

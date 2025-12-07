@@ -3,9 +3,8 @@ import electronLogo from '../assets/electron.svg'
 import '../css/index.css'
 import { LibraryIcon, Plus, Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import AddApp from '@renderer/components/AddApp'
-import { AppItem } from '@renderer/types/app'
-import { loadApps, saveApps } from '@renderer/lib/appStorage'
+import AddApp from '../components/AddApp'
+import { AppItem } from '../../../shared/types'
 
 export const Route = createFileRoute('/')({
   component: Home
@@ -16,13 +15,17 @@ function Home() {
   const [addAppModal, setAddAppModal] = useState(false)
 
   useEffect(() => {
-    setApps(loadApps())
+    async function fetchApps() {
+      const loaded = await window.api.loadApps()
+      setApps(loaded)
+    }
+    fetchApps()
   }, [])
 
-  function handleAddApp(newApp: AppItem) {
-    const updated = [...apps, newApp]
+  async function handleAddApp(newApp: Omit<AppItem, 'id'>) {
+    const appWithId: AppItem = { ...newApp, id: '2' }
+    const updated = await window.api.addApp(appWithId)
     setApps(updated)
-    saveApps(updated)
   }
 
   return (
