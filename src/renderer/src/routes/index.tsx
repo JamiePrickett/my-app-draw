@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import electronLogo from '../assets/electron.svg'
-import '../css/index.css'
-import { LibraryIcon, Plus, Search } from 'lucide-react'
+import '../styles/index.css'
+import { Edit, LibraryIcon, Plus, Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import AddApp from '../components/AddApp'
 import { AppItem } from '../../../shared/types'
@@ -41,6 +41,7 @@ function Home() {
   return (
     <>
       <div className="base-container">
+        {/* Right Menu */}
         <div className="right-menu">
           <button className="menu-item">
             <LibraryIcon className="icon" />
@@ -55,11 +56,21 @@ function Home() {
             <Plus className="icon" />
           </button>
         </div>
+
+        {/* Main Content */}
         <div className="main-container">
-          <div className="search-box">
-            <Search color="#fff" className="searchIcon" />
-            <input placeholder="Search.." />
+          {/* Search Row */}
+          <div className="search-row">
+            <div className="search-box">
+              <Search color="#fff" className="search-icon" />
+              <input placeholder="Search.." />
+            </div>
+            <button className="edit-btn">
+              <Edit className="edit-icon" />
+            </button>
           </div>
+
+          {/* App List */}
           <div className="app-list">
             {apps.map((app) => (
               <button key={app.id} className="app-item" onClick={() => handleLaunchApp(app)}>
@@ -69,12 +80,15 @@ function Home() {
               </button>
             ))}
 
+            {/* Add App Button */}
             <button className="app-item add-app-btn" onClick={() => setAddAppModal(true)}>
               <Plus className="icon" />
             </button>
           </div>
         </div>
       </div>
+
+      {/* Add App Modal */}
       <AddApp onSubmit={handleAddApp} open={addAppModal} onClose={() => setAddAppModal(false)} />
     </>
   )

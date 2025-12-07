@@ -1,4 +1,4 @@
-import '../css/addApp.css'
+import '../styles/addApp.css'
 import Modal from './Modal'
 import electronLogo from '../assets/electron.svg'
 import React, { useRef, useState } from 'react'

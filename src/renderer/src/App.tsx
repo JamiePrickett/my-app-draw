@@ -1,7 +1,5 @@
-import Versions from './components/Versions'
-
 function App() {
-  return <Versions />
+  return <p>uh oh</p>
 }
 
 export default App

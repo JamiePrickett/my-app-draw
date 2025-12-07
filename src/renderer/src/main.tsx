@@ -1,4 +1,4 @@
-import './css/main.css'
+import './styles/base.css'
 
 import { createRoot } from 'react-dom/client'
 import { createRouter, RouterProvider } from '@tanstack/react-router'

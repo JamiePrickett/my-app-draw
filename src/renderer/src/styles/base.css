@@ -1,0 +1,66 @@
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+img {
+  user-select: none;
+}
+
+:root {
+  --primary: #bf4e30; /* for button normal */
+  --primary-light: #d55b38; /* for button hover */
+  --primary-medium: #9e4129; /* for button active / border */
+
+  --border: #706f73;
+
+  --bg-dark: #141312;
+  --bg-main: #242120;
+  --bg-item: #1a1817;
+  --bg-btn: #302e2c;
+
+  --text: #e4e4e4;
+
+  --radius-lg: 16px;
+  --radius-md: 8px;
+
+  --transition-fast: all 0.1s ease;
+
+  --error: #e75146;
+}
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+  -webkit-user-drag: none;
+}
+
+body {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
