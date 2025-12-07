@@ -10,6 +10,7 @@ declare global {
       addApp: (item: AppItem) => Promise<AppItem[]>
       updateApp: (item: AppItem) => Promise<AppItem[]>
       deleteApp: (id: string) => Promise<AppItem[]>
+      launchApp: (source: string) => Promise<boolean>
     }
   }
 }

@@ -83,7 +83,7 @@
   background-color: #1a1817;
   border: none;
   width: 128px;
-  height: 168px;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -149,4 +149,8 @@
   width: 60%;
   height: 60%;
   stroke: #e4e4e4;
+}
+
+.fail-text {
+  color: #E1594F;
 }

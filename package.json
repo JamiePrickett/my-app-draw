@@ -25,7 +25,8 @@
     "@electron-toolkit/utils": "^4.0.0",
     "@tanstack/react-router": "^1.139.14",
     "@tanstack/react-router-devtools": "^1.139.14",
-    "lucide-react": "^0.555.0"
+    "lucide-react": "^0.555.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",

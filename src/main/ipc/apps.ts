@@ -1,6 +1,8 @@
-import { ipcMain } from 'electron'
+import { ipcMain, shell } from 'electron'
 import { loadApps, saveApps } from '../storage/apps'
 import { AppItem } from '../../shared/types'
+import { existsSync } from 'fs'
+import { exec } from 'child_process'
 
 ipcMain.handle('apps:load', () => {
   return loadApps()
@@ -33,4 +35,26 @@ ipcMain.handle('apps:delete', (_e, id: string) => {
   const apps = loadApps().filter((a) => a.id != id)
   saveApps(apps)
   return apps
+})
+
+ipcMain.handle('apps:launch', async (_e, source: string) => {
+  try {
+    if (!source) return false
+
+    if (source.startsWith('http')) {
+      await shell.openExternal(source)
+      return true
+    } else if (existsSync(source)) {
+      exec(`"${source}"`, (err) => {
+        if (err) console.error('Failed to launch non http app:', err)
+      })
+      return true
+    } else {
+      console.error('Source not exist:', source)
+      return false
+    }
+  } catch (error) {
+    console.error('Error launching app:', error)
+    return false
+  }
 })

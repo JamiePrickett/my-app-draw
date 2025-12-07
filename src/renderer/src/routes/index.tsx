@@ -5,6 +5,7 @@ import { LibraryIcon, Plus, Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import AddApp from '../components/AddApp'
 import { AppItem } from '../../../shared/types'
+import { v4 as uuidv4 } from 'uuid'
 
 export const Route = createFileRoute('/')({
   component: Home
@@ -13,6 +14,7 @@ export const Route = createFileRoute('/')({
 function Home() {
   const [apps, setApps] = useState<AppItem[]>([])
   const [addAppModal, setAddAppModal] = useState(false)
+  const [launchFails, setLaunchFails] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
     async function fetchApps() {
@@ -23,9 +25,17 @@ function Home() {
   }, [])
 
   async function handleAddApp(newApp: Omit<AppItem, 'id'>) {
-    const appWithId: AppItem = { ...newApp, id: '2' }
+    const appWithId: AppItem = { ...newApp, id: uuidv4() }
     const updated = await window.api.addApp(appWithId)
     setApps(updated)
+  }
+
+  async function handleLaunchApp(app: AppItem) {
+    const success = await window.api.launchApp(app.source)
+    setLaunchFails((prev) => ({
+      ...prev,
+      [app.id]: !success
+    }))
   }
 
   return (
@@ -52,7 +62,8 @@ function Home() {
           </div>
           <div className="app-list">
             {apps.map((app) => (
-              <button key={app.id} className="app-item" onClick={() => console.log('Click')}>
+              <button key={app.id} className="app-item" onClick={() => handleLaunchApp(app)}>
+                {launchFails[app.id] && <p className="fail-text">Launch Failed</p>}
                 <img src={app.icon} alt={app.title} />
                 <span>{app.title}</span>
               </button>
