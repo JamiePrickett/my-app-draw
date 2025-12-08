@@ -1,3 +1,5 @@
+@import './base.css';
+
 .browse-btn {
   background-color: #70a9ff;
   border: none;
@@ -5,7 +7,7 @@
   padding: 8px 16px;
   width: min-content;
   cursor: pointer;
-  transition: all 0.1s ease;
+  transition: var(--transition-fast);
 }
 
 .browse-btn:hover {
@@ -17,31 +19,30 @@
 }
 
 .title-input {
-  background-color: #302e2c;
-  border: 1px solid #706f73;
+  background-color: var(--bg-btn);
+  border: 1px solid var(--border);
   outline: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 8px;
-  color: #e4e4e4;
+  color: var(--text);
   font-size: medium;
 }
 
 .title-input:focus {
-  border-color: #9e4129;
+  border-color: var(--primary-medium);
 }
 
 .icon-btn {
-  /* background-color: #9E4129; */
   width: 64px;
   aspect-ratio: 1 / 1;
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   cursor: pointer;
 }
 
 .source-container {
-  background-color: #302e2c;
-  border: 1px solid #706f73;
-  border-radius: 8px;
+  background-color: var(--bg-btn);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   display: flex;
   justify-content: space-between;
   padding-right: 4px;
@@ -52,44 +53,69 @@
   border: none;
   outline: none;
   padding: 8px;
-  color: #e4e4e4;
+  color: var(--text);
   font-size: medium;
 }
 
 .source-container:focus-within {
-  border-color: #9e4129;
+  border-color: var(--primary-medium);
 }
 
 .source-container button {
-  background-color: #242120;
+  background-color: var(--bg-main);
   border: none;
   outline: none;
   border-radius: 4px;
-  color: #e4e4e4;
+  color: var(--text);
   font-size: smaller;
   margin: 4px 0;
   cursor: pointer;
 }
 
+/* Add / Delete buttons */
+.modal-app-btn-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-app-del-btn,
 .add-btn {
-  background-color: #bf4e30;
+  background-color: var(--primary);
   border: none;
   outline: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   width: min-content;
   padding: 8px 16px;
   cursor: pointer;
-  color: #e4e4e4;
+  color: var(--text);
   font-size: larger;
   font-weight: 700;
-  transition: all 0.1s ease;
+  transition: var(--transition-fast);
 }
 
 .add-btn:hover {
   transform: scale(1.03);
-  background-color: #d55b38;
+  background-color: var(--primary-light);
 }
 
 .add-btn:active {
-  background-color: #9e4129;
+  background-color: var(--primary-medium);
+  transform: scale(1);
+}
+
+
+.modal-app-del-btn {
+  background-color: var(--error);
+  border-radius: var(--radius-md);
+  padding: 8px;
+}
+
+.modal-app-del-btn:hover {
+  transform: scale(1.03);
+  opacity: 0.9;
+}
+
+.modal-app-del-btn:active {
+  transform: scale(1);
+  opacity: 0.8;
 }

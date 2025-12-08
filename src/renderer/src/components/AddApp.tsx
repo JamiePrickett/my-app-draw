@@ -1,25 +1,44 @@
 import '../styles/addApp.css'
 import Modal from './Modal'
 import electronLogo from '../assets/electron.svg'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AppItem } from '../../../shared/types'
 
 type AddAppProps = {
   open: boolean
   onClose: () => void
   onSubmit: (item: AppItem) => void
+  app: AppItem | null
+  onDelete: (appId: string) => void
 }
 
-export default function AddApp({ open, onClose, onSubmit }: AddAppProps) {
+const emptyForm = {
+  id: '',
+  title: '',
+  icon: '',
+  source: ''
+}
+
+export default function AddApp({ open, onClose, onSubmit, app, onDelete }: AddAppProps) {
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const [form, setForm] = useState({
-    id: '2',
-    title: '',
-    icon: '',
-    source: ''
-  })
+  const [form, setForm] = useState(emptyForm)
+
+  // Clear errors
+  useEffect(() => {
+    if (!open) {
+      setError(null)
+      setForm(emptyForm)
+      return
+    }
+
+    if (app) {
+      setForm({ ...app })
+    } else {
+      setForm(emptyForm)
+    }
+  }, [open, app])
 
   async function handleSubmit() {
     try {
@@ -34,15 +53,8 @@ export default function AddApp({ open, onClose, onSubmit }: AddAppProps) {
 
       await onSubmit(form)
 
-      setForm({
-        id: '2',
-        title: '',
-        icon: '',
-        source: ''
-      })
-
+      setForm(emptyForm)
       setError(null)
-      onClose()
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Error occurred')
     }
@@ -50,9 +62,7 @@ export default function AddApp({ open, onClose, onSubmit }: AddAppProps) {
 
   async function handleBrowseApp() {
     const result = await window.api.pickApp()
-
     if (!result) return
-
     setForm({ ...form, title: result.title, source: result.source, icon: result.icon || '' })
   }
 
@@ -65,16 +75,14 @@ export default function AddApp({ open, onClose, onSubmit }: AddAppProps) {
     if (!file) return
 
     const reader = new FileReader()
-    reader.onload = () => {
-      setForm({ ...form, icon: reader.result as string })
-    }
-
+    reader.onload = () => setForm({ ...form, icon: reader.result as string })
     reader.readAsDataURL(file)
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="Add App">
-      {error && <p>{error}</p>}
+    <Modal open={open} onClose={onClose}>
+      <h2 className="modal-title">{!app ? 'Add App' : 'Edit App'}</h2>
+      {error && <p className="error">{error}</p>}
       <button className="browse-btn" onClick={handleBrowseApp}>
         Browse
       </button>
@@ -96,9 +104,16 @@ export default function AddApp({ open, onClose, onSubmit }: AddAppProps) {
         />
         <button onMouseDown={(e) => e.preventDefault()}>Browse</button> {/* TODO: add this */}
       </div>
-      <button onClick={handleSubmit} className="add-btn prim">
-        Add
-      </button>
+      <div className="modal-app-btn-row">
+        <button onClick={handleSubmit} className="add-btn prim">
+          Save
+        </button>
+        {app && app.id && (
+          <button className="modal-app-del-btn" onClick={() => onDelete(app.id)}>
+            Delete
+          </button>
+        )}
+      </div>
     </Modal>
   )
 }

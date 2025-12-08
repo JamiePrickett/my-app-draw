@@ -4,11 +4,10 @@ import '../styles/modal.css'
 type ModalProps = {
   open: boolean
   onClose: () => void
-  title?: string
   children: ReactNode
 }
 
-export default function Modal({ open, onClose, title, children }: ModalProps) {
+export default function Modal({ open, onClose, children }: ModalProps) {
   useEffect(() => {
     if (!open) return
 
@@ -25,7 +24,9 @@ export default function Modal({ open, onClose, title, children }: ModalProps) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        {title && <h2 className="modal-title">{title}</h2>}
+        <button className="modal-close-btn" onClick={onClose}>
+          X
+        </button>
         <div className="modal-body">{children}</div>
       </div>
     </div>

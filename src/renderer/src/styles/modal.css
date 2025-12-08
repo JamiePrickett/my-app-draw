@@ -10,6 +10,7 @@
 }
 
 .modal-container {
+  position: relative;
   background-color: #242120;
   border-radius: 16px;
   padding: 24px;
@@ -30,7 +31,19 @@
 .modal-body {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap
+  : 12px;
+}
+
+.modal-close-btn {
+  position: absolute;
+  border: none;
+  top: 8px;
+  right: 8px;
+  background-color: transparent;
+  color: var(--text);
+  font-size: larger;
+  cursor: pointer;
 }
 
 @keyframes fadeIn {

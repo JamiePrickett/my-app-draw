@@ -90,31 +90,32 @@
 }
 
 /* Edit Button */
-.edit-btn {
+.edit-toggle-btn {
   background-color: var(--bg-item);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
+  cursor: pointer;
 }
 
 .edit-icon {
   stroke: var(--text);
 }
 
-.edit-btn:hover {
+.edit-toggle-btn:hover {
   transform: scale(1.05);
   border-color: var(--primary-medium);
 }
 
-.edit-btn:hover .edit-icon {
+.edit-toggle-btn:hover .edit-icon {
   stroke: var(--primary-light);
 }
 
-.edit-btn:active {
+.edit-toggle-btn:active {
   transform: scale(1);
 }
 
-.edit-btn:active .edit-icon {
+.edit-toggle-btn:active .edit-icon {
   stroke: var(--primary-medium);
 }
 
@@ -129,13 +130,13 @@
 .app-item {
   background-color: var(--bg-item);
   border: none;
+  padding: 0;
   width: 128px;
   height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 8px;
   border-radius: var(--radius-lg);
   cursor: pointer;
   transition: var(--transition-fast);
@@ -151,16 +152,17 @@
 }
 
 .app-item img {
+  padding: 0 8px;
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: contain;
+  margin-top: 8px;
   border-radius: var(--radius-md);
 }
 
 .app-item span {
   background-color: var(--bg-btn);
-  margin-top: 8px;
-  width: 100%;
+  width: calc(100% - 16px);
   height: 32px;
   display: flex;
   justify-content: center;
@@ -168,6 +170,8 @@
   border-radius: var(--radius-md);
   color: var(--text);
   font-weight: 700;
+  margin-bottom: 8px;
+  overflow: hidden;
   transition: var(--transition-fast);
 }
 
@@ -205,4 +209,13 @@
 
 .fail-text {
   color: var(--error);
+}
+
+/* Edit mode */
+.edit-toggle-btn-on {
+  border-color: var(--primary);
+}
+
+.edit-icon-on {
+  stroke: var(--primary);
 }
