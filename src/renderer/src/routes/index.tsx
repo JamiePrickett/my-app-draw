@@ -22,15 +22,13 @@ function Home() {
   const [addAppModal, setAddAppModal] = useState(false)
   const [groupsModal, setGroupsModal] = useState(false)
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
 
   // Load apps once on page load
   useEffect(() => {
     window.api.loadApps().then(setApps)
     window.api.loadGroups().then(setGroups)
   }, [])
-
-  // changes apps shown based on selected group
-  const visibleApps = selectedGroupId ? apps.filter((app) => app.groupId === selectedGroupId) : apps
 
   // Open Group modal for edit / new
   const openGroupModal = (group?: Group) => {
@@ -55,6 +53,18 @@ function Home() {
       return out
     })
   }
+
+  const filterApps = apps.filter((app) => {
+    if (selectedGroupId && app.groupId !== selectedGroupId) {
+      return false
+    }
+
+    if (search && !app.title.toLowerCase().includes(search.toLowerCase())) {
+      return false
+    }
+
+    return true
+  })
 
   return (
     <>
@@ -93,7 +103,11 @@ function Home() {
           <div className="search-row">
             <div className="search-box">
               <Search color="#fff" className="search-icon" />
-              <input placeholder="Search.." />
+              <input
+                placeholder="Search.."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
             <button
               className={`edit-toggle-btn ${editMode && 'edit-toggle-btn-on'}`}
@@ -105,7 +119,7 @@ function Home() {
 
           {/* App List */}
           <div className="app-list">
-            {visibleApps.map((app) => (
+            {filterApps.map((app) => (
               <button
                 key={app.id}
                 className="app-item"
