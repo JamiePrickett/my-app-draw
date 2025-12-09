@@ -26,6 +26,7 @@
     "@tanstack/react-router": "^1.139.14",
     "@tanstack/react-router-devtools": "^1.139.14",
     "lucide-react": "^0.555.0",
+    "react-select": "^5.10.2",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

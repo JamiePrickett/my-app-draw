@@ -5,73 +5,55 @@ import { Edit, LibraryIcon, Plus, Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import AddApp from '../components/AddApp'
 import { AppItem } from '../../../shared/types'
-import { v4 as uuidv4 } from 'uuid'
+import GroupsModal from '../components/GroupsModal'
+import { Group } from '../../../shared/types/app'
 
 export const Route = createFileRoute('/')({
   component: Home
 })
 
 function Home() {
+  const [groups, setGroups] = useState<Group[]>([])
   const [apps, setApps] = useState<AppItem[]>([])
-  const [editMode, setEditMode] = useState(false)
-  const [addAppModal, setAddAppModal] = useState(false)
-  const [editingApp, setEditingApp] = useState<AppItem | null>(null)
   const [launchFails, setLaunchFails] = useState<Record<string, boolean>>({})
+  const [editMode, setEditMode] = useState(false)
+  const [editingApp, setEditingApp] = useState<AppItem | null>(null)
+  const [editingGroup, setEditingGroup] = useState<Group | null>(null)
+  const [addAppModal, setAddAppModal] = useState(false)
+  const [groupsModal, setGroupsModal] = useState(false)
+  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null)
 
+  // Load apps once on page load
   useEffect(() => {
-    async function fetchApps() {
-      const loaded = await window.api.loadApps()
-      setApps(loaded)
-    }
-    fetchApps()
+    window.api.loadApps().then(setApps)
+    window.api.loadGroups().then(setGroups)
   }, [])
 
-  // Add new app
-  async function handleAddApp(newApp: AppItem) {
-    const appWithId: AppItem = { ...newApp, id: uuidv4() }
-    const updated = await window.api.addApp(appWithId)
-    setApps(updated)
+  // changes apps shown based on selected group
+  const visibleApps = selectedGroupId ? apps.filter((app) => app.groupId === selectedGroupId) : apps
+
+  // Open Group modal for edit / new
+  const openGroupModal = (group?: Group) => {
+    setEditingGroup(group || null)
+    setGroupsModal(true)
   }
 
-  // Update app
-  async function handleUpdateApp(app: AppItem) {
-    const updatedApps = await window.api.updateApp(app)
-    setApps(updatedApps)
-    setEditingApp(null)
-    setAddAppModal(false)
+  // Open Add App modal for edit / new
+  const openAddApp = (app?: AppItem) => {
+    setEditingApp(app || null)
+    setAddAppModal(true)
   }
 
-  // Delete app
-  async function handleDelete(appId: string) {
-    const updated = await window.api.deleteApp(appId)
-    setApps(updated)
-    setEditingApp(null)
-    setAddAppModal(false)
-  }
-
-  // Closes modal and clears state
-  function handleCloseModal() {
-    setAddAppModal(false)
-    setEditingApp(null)
-  }
-
-  // launch App or edit app
-  function handleAppClick(app: AppItem) {
-    if (!editMode) {
-      handleLaunchApp(app)
-    } else {
-      setEditingApp(app)
-      setAddAppModal(true)
-    }
-  }
-
-  // Launch app
-  async function handleLaunchApp(app: AppItem) {
+  // launch App
+  const handleLaunchApp = async (app: AppItem) => {
     const success = await window.api.launchApp(app.source)
-    setLaunchFails((prev) => ({
-      ...prev,
-      [app.id]: !success
-    }))
+
+    setLaunchFails((prev) => {
+      const out = { ...prev }
+      if (!success) out[app.id] = true
+      else delete out[app.id]
+      return out
+    })
   }
 
   return (
@@ -79,16 +61,28 @@ function Home() {
       <div className="base-container">
         {/* Right Menu */}
         <div className="right-menu">
-          <button className="menu-item">
+          <button
+            className={`menu-item ${!selectedGroupId && 'menu-item-selected'}`}
+            onClick={() => setSelectedGroupId(null)}
+          >
             <LibraryIcon className="icon" />
           </button>
-          <button className="menu-item">
-            <img src={electronLogo} alt="menu-item" />
-          </button>
-          <button className="menu-item">
-            <img src={electronLogo} alt="menu-item" />
-          </button>
-          <button className="menu-item">
+          {groups.map((Group) => (
+            <button
+              key={Group.id}
+              className={`menu-item ${selectedGroupId === Group.id && 'menu-item-selected'}`}
+              onClick={() => (!editMode ? setSelectedGroupId(Group.id) : openGroupModal(Group))}
+            >
+              <img src={Group.icon || electronLogo} alt="menu-item" />
+            </button>
+          ))}
+          <button
+            className="menu-item"
+            onClick={() => {
+              setEditingGroup(null)
+              setGroupsModal(true)
+            }}
+          >
             <Plus className="icon" />
           </button>
         </div>
@@ -111,10 +105,14 @@ function Home() {
 
           {/* App List */}
           <div className="app-list">
-            {apps.map((app) => (
-              <button key={app.id} className="app-item" onClick={() => handleAppClick(app)}>
+            {visibleApps.map((app) => (
+              <button
+                key={app.id}
+                className="app-item"
+                onClick={() => (editMode ? openAddApp(app) : handleLaunchApp(app))}
+              >
                 {launchFails[app.id] && <p className="error">Launch Failed</p>}
-                <img src={app.icon} alt={app.title} />
+                <img src={app.icon || electronLogo} alt={app.title} />
                 <span>{app.title}</span>
               </button>
             ))}
@@ -135,11 +133,19 @@ function Home() {
 
       {/* Add/Edit App Modal */}
       <AddApp
-        onSubmit={!editingApp ? handleAddApp : handleUpdateApp}
+        groups={groups}
         open={addAppModal}
-        onClose={handleCloseModal}
+        onClose={() => setAddAppModal(false)}
         app={editingApp}
-        onDelete={handleDelete}
+        onAppsUpdated={setApps}
+      />
+
+      {/* Groups Modal */}
+      <GroupsModal
+        open={groupsModal}
+        onClose={() => setGroupsModal(false)}
+        group={editingGroup}
+        onGroupsUpdated={setGroups}
       />
     </>
   )

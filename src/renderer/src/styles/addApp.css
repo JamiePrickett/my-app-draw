@@ -72,6 +72,44 @@
   cursor: pointer;
 }
 
+/* Groups Dropdown */
+.group-select {
+  margin-top: 8px;
+}
+.group__control {
+  background-color: var(--bg-btn);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 2px 8px;
+}
+
+.group__control--is-focused {
+  border-color: var(--primary-medium);
+}
+
+.group__placeholder {
+  opacity: 0.5;
+}
+
+.group__menu {
+  background-color: var(--bg-btn);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  padding: 4px;
+}
+
+.group__option {
+  padding: 4px;
+  border-radius: var(--radius-md);
+}
+
+.group__option--is-focused {
+  background-color: var(--bg-item);
+}
+
+.group__option--is-selected {
+  background-color: var(--primary-medium);
+}
+
 /* Add / Delete buttons */
 .modal-app-btn-row {
   display: flex;
@@ -102,7 +140,6 @@
   background-color: var(--primary-medium);
   transform: scale(1);
 }
-
 
 .modal-app-del-btn {
   background-color: var(--error);
