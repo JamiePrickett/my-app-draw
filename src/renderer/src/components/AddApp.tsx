@@ -27,6 +27,7 @@ export default function AddApp({ open, onClose, app, onAppsUpdated, groups }: Ad
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [form, setForm] = useState<AppItem>(EMPTY_FORM)
+  const titleRef = useRef<HTMLInputElement>(null)
 
   // Reset and preload form
   useEffect(() => {
@@ -39,6 +40,12 @@ export default function AddApp({ open, onClose, app, onAppsUpdated, groups }: Ad
     if (app) setForm(app)
     else setForm(EMPTY_FORM)
   }, [open, app])
+
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => titleRef.current?.focus(), 0)
+    }
+  }, [open])
 
   // Save Updated / New App
   const handleSubmit = async () => {
@@ -102,6 +109,7 @@ export default function AddApp({ open, onClose, app, onAppsUpdated, groups }: Ad
         Browse
       </button>
       <input
+        ref={titleRef}
         className="title-input"
         placeholder="Title"
         value={form.title}

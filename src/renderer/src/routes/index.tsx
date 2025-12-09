@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import electronLogo from '../assets/electron.svg'
 import '../styles/index.css'
 import { Edit, LibraryIcon, Plus, Search } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import AddApp from '../components/AddApp'
 import { AppItem } from '../../../shared/types'
 import GroupsModal from '../components/GroupsModal'
@@ -23,12 +23,27 @@ function Home() {
   const [groupsModal, setGroupsModal] = useState(false)
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const [selectedAppId, setSelectedAppId] = useState<string | null>(null)
 
   // Load apps once on page load
   useEffect(() => {
     window.api.loadApps().then(setApps)
     window.api.loadGroups().then(setGroups)
+
+    searchInputRef.current?.focus()
   }, [])
+
+  useEffect(() => {
+    setSearch('')
+    searchInputRef.current?.focus()
+  }, [selectedGroupId])
+
+  useEffect(() => {
+    if (!addAppModal && !groupsModal) {
+      searchInputRef.current?.focus()
+    }
+  }, [addAppModal, groupsModal])
 
   // Open Group modal for edit / new
   const openGroupModal = (group?: Group) => {
@@ -65,6 +80,30 @@ function Home() {
 
     return true
   })
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter') return
+      if (addAppModal || groupsModal) return
+      const first = filterApps[0]
+      if (!first) return
+
+      if (editMode) openAddApp(first)
+      else handleLaunchApp(first)
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [addAppModal, editMode, filterApps, groupsModal])
+
+  useEffect(() => {
+    if (!search) return setSelectedAppId(null)
+    if (filterApps.length > 0) {
+      setSelectedAppId(filterApps[0].id)
+    } else {
+      setSelectedAppId(null)
+    }
+  }, [filterApps, search])
 
   return (
     <>
@@ -104,6 +143,7 @@ function Home() {
             <div className="search-box">
               <Search color="#fff" className="search-icon" />
               <input
+                ref={searchInputRef}
                 placeholder="Search.."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -122,7 +162,7 @@ function Home() {
             {filterApps.map((app) => (
               <button
                 key={app.id}
-                className="app-item"
+                className={`app-item ${selectedAppId === app.id && 'app-item-selected'}`}
                 onClick={() => (editMode ? openAddApp(app) : handleLaunchApp(app))}
               >
                 {launchFails[app.id] && <p className="error">Launch Failed</p>}

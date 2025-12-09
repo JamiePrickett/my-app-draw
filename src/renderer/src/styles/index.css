@@ -165,6 +165,9 @@
   outline: 2px solid var(--primary-medium);
 }
 
+.app-item-selected{
+  outline: 2px solid var(--primary-medium);
+}
 .app-item:active {
   transform: scale(1);
 }

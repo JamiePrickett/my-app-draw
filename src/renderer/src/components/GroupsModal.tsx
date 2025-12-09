@@ -21,6 +21,7 @@ export default function GroupsModal({ open, onClose, group, onGroupsUpdated }: G
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [form, setForm] = useState(EMPTY_FORM)
+  const titleRef = useRef<HTMLInputElement>(null)
 
   // Clear error load form data
   useEffect(() => {
@@ -32,6 +33,12 @@ export default function GroupsModal({ open, onClose, group, onGroupsUpdated }: G
     if (group) setForm(group)
     else setForm(EMPTY_FORM)
   }, [open, group])
+
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => titleRef.current?.focus(), 0)
+    }
+  }, [open])
 
   // Save updated / new group
   const handleSubmit = async () => {
@@ -77,6 +84,7 @@ export default function GroupsModal({ open, onClose, group, onGroupsUpdated }: G
       <h2 className="modal-title">{!group ? 'Add Group' : 'Edit Group'}</h2>
       {error && <p className="error">{error}</p>}
       <input
+        ref={titleRef}
         className="title-input"
         placeholder="Title"
         value={form.title}
